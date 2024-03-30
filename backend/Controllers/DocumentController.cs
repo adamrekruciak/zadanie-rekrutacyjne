@@ -104,7 +104,71 @@ namespace zadanie_rekrutacyjne.Controllers
                 return StatusCode(500, "Internal server error"); // Obsłuż błąd w przypadku niepowodzenia pobrania danych
             }
         }
-}
+
+        [HttpGet("documents/{id}")]
+        public IActionResult GetDocumentById(int id)
+        {
+            try
+            {
+                var document = _context.Documents.FirstOrDefault(d => d.Id == id); // Pobierz dokument na podstawie jego identyfikatora
+                if (document == null)
+                {
+                    return NotFound(); // Jeśli dokument nie został znaleziony, zwróć kod 404
+                }
+                return Ok(document); // Zwróć dokument w formacie JSON
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error"); // Obsłuż błąd w przypadku niepowodzenia pobrania danych
+            }
+        }
+        [HttpGet("documents/{id}/items")]
+        public IActionResult GetDocumentItemsById(int id)
+        {
+            try
+            {
+                var documentItems = _context.DocumentItems.Where(item => item.DocumentId == id).ToList();
+                if (documentItems.Count == 0)
+                {
+                    return NotFound(); // Jeśli nie znaleziono pozycji dokumentów dla danego ID, zwróć kod 404
+                }
+                return Ok(documentItems); // Zwróć pozycje dokumentów w formacie JSON
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error"); // Obsłuż błąd w przypadku niepowodzenia pobrania danych
+            }
+        }
+        [HttpDelete("delete-all-documents")]
+        public IActionResult DeleteAllDocuments()
+        {
+            try
+            {
+                _context.Database.ExecuteSqlRaw("TRUNCATE TABLE Documents");
+                return Ok("All documents have been deleted successfully.");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error");
+            }
+        }
+
+        [HttpDelete("delete-all-document-items")]
+        public IActionResult DeleteAllDocumentItems()
+        {
+            try
+            {
+                _context.Database.ExecuteSqlRaw("TRUNCATE TABLE DocumentItems");
+                return Ok("All document items have been deleted successfully.");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error");
+            }
+        }
+
+
+    }
 
     public sealed class DocumentItemMap : ClassMap<DocumentItem>
     {

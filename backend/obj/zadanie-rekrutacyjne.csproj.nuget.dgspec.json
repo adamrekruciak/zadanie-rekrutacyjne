@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\adamr\\Documents\\Zadanie dla Programisty\\zadanie-rekrutacyjne\\zadanie-rekrutacyjne.csproj": {}
+    "C:\\Users\\adamr\\Documents\\zadanie-rekrutacyjne\\backend\\zadanie-rekrutacyjne.csproj": {}
   },
   "projects": {
-    "C:\\Users\\adamr\\Documents\\Zadanie dla Programisty\\zadanie-rekrutacyjne\\zadanie-rekrutacyjne.csproj": {
+    "C:\\Users\\adamr\\Documents\\zadanie-rekrutacyjne\\backend\\zadanie-rekrutacyjne.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\adamr\\Documents\\Zadanie dla Programisty\\zadanie-rekrutacyjne\\zadanie-rekrutacyjne.csproj",
+        "projectUniqueName": "C:\\Users\\adamr\\Documents\\zadanie-rekrutacyjne\\backend\\zadanie-rekrutacyjne.csproj",
         "projectName": "zadanie-rekrutacyjne",
-        "projectPath": "C:\\Users\\adamr\\Documents\\Zadanie dla Programisty\\zadanie-rekrutacyjne\\zadanie-rekrutacyjne.csproj",
+        "projectPath": "C:\\Users\\adamr\\Documents\\zadanie-rekrutacyjne\\backend\\zadanie-rekrutacyjne.csproj",
         "packagesPath": "C:\\Users\\adamr\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\adamr\\Documents\\Zadanie dla Programisty\\zadanie-rekrutacyjne\\obj\\",
+        "outputPath": "C:\\Users\\adamr\\Documents\\zadanie-rekrutacyjne\\backend\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

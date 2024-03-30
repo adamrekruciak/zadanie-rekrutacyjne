@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "yoOAc3mslOia3VmKmekU4K2H+pLylkvYZIPFKcl3tf6dOBT6jMsJfdcTlsr9Ccj9X3hzTlnBhGYMDGGkWGllVQ==",
+  "dgSpecHash": "LuF/hcVJ8eU1yRc6F+55ZMnG1nYEFcj/JyDvHSA3URpIekxT7H92CH5GZwIZGOPLsTvQAMxm8++UqZi2nBbK5Q==",
   "success": true,
-  "projectFilePath": "C:\\Users\\adamr\\Documents\\Zadanie dla Programisty\\zadanie-rekrutacyjne\\zadanie-rekrutacyjne.csproj",
+  "projectFilePath": "C:\\Users\\adamr\\Documents\\zadanie-rekrutacyjne\\backend\\zadanie-rekrutacyjne.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\adamr\\.nuget\\packages\\azure.core\\1.35.0\\azure.core.1.35.0.nupkg.sha512",
     "C:\\Users\\adamr\\.nuget\\packages\\azure.identity\\1.10.3\\azure.identity.1.10.3.nupkg.sha512",
