@@ -4,14 +4,26 @@ import axios from 'axios';
 export default createStore({
   state: {
     documents: [],
-    isDataImported: false,
+    documentItems: [],
+    isDocumentsImported: false,
+    isDocumentItemsImported: false,
+  },
+  getters: {
+    isDocumentsImported(state) {
+      return state.isDocumentsImported;
+    },
+    isDocumentItemsImported(state) {
+      return state.isDocumentItemsImported;
+    },
   },
   mutations: {
     setDocuments(state, documents) {
       state.documents = documents;
+      state.isDocumentsImported = documents.length > 0;
     },
-    setDataImported(state, value) {
-      state.isDataImported = value;
+    setDocumentItems(state, documentItems) {
+      state.documentItems = documentItems;
+      state.isDocumentItemsImported = documentItems.length > 0;
     },
   },
   actions: {

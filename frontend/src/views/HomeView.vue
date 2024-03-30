@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="project">
     <div class="buttons">
       <div class="action-buttons">
         <MDBBtn color="info" @click="toggleView">Zmień widok</MDBBtn>
@@ -33,6 +33,7 @@ import DocumentList from '../components/DocumentList.vue';
 import DocumentTable from '../components/DocumentTable.vue';
 import { MDBBtn } from 'mdb-vue-ui-kit';
 import axios from 'axios';
+import { toast } from 'vue3-toastify';
 
 export default {
   name: 'App',
@@ -53,18 +54,29 @@ export default {
     },
     async importDocuments() {
       try {
+        if (this.$store.getters.isDocumentsImported) {
+         toast.error('Dokumenty są już zaimportowane!');
+        return;
+        }
         const response = await axios.post('https://localhost:7107/Document/import');
         console.log(response.data);
         this.$store.dispatch('fetchDocuments');
+        toast.success('Dokumenty zostały załadowane!'); 
+
       } catch (error) {
         console.error('Error importing documents:', error);
       }
     },
     async importDocumentItems() {
       try {
+        if (this.$store.getters.isDocumentItemsImported) {
+           toast.error('Szczegóły dokumentów zostały już zaimportowane!');
+    return;
+  }
         const response = await axios.post('https://localhost:7107/Document/import-items');
         console.log(response.data); 
         this.$store.dispatch('fetchDocuments');
+        toast.success('Szczegóły zostały załadowane!'); 
       } catch (error) {
         console.error('Error importing document items:', error);
       }
@@ -74,6 +86,8 @@ export default {
       const response = await axios.delete('https://localhost:7107/Document/delete-all-documents');
       console.log(response.data); 
       this.$store.dispatch('fetchDocuments'); // Pobranie dokumentów ponownie
+      toast.success('Dokumenty zostały usunięte!'); 
+
     } catch (error) {
       console.error('Error deleting documents:', error);
     }
@@ -83,6 +97,7 @@ export default {
     const response = await axios.delete('https://localhost:7107/Document/delete-all-document-items');
     console.log(response.data); 
     this.$store.dispatch('fetchDocuments'); // Pobranie dokumentów ponownie
+    toast.success('Szczegóły dokumentów zostały usunięte!');
   } catch (error) {
     console.error('Error deleting document items:', error);
   }
@@ -92,18 +107,11 @@ export default {
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  max-width: 1800px;
+.project{
+  max-width: 1600px;
   margin: 0 auto;
-  color: #2c3e50;
-  margin-top: 20px;
-  
+  margin-top: 10px;
 }
-
 button {
   margin: 5px;
   width: 200px; 
