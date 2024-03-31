@@ -1,25 +1,28 @@
 import { createApp } from 'vue';
 import App from './App.vue';
-import router from './router'; // Your Vue Router for routing
-import store from './store'; // Your Vuex store for state management
+import router from './router'; // Twój Vue Router do routingu
+import store from './store'; // Twój Vuex store do zarządzania stanem
 
-// Importing MDB Vue UI Kit for styling
+// Importowanie MDB Vue UI Kit do stylizacji
 import 'mdb-vue-ui-kit/css/mdb.min.css';
 
-// Import Vue3Toastify for notifications
+// Import Vue3Toastify do powiadomień
 import Vue3Toastify from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
 
 const app = createApp(App);
 
-// Use your router and store
+// Użyj swojego routera i magazynu
 app.use(router);
 app.use(store);
 
-// Use Vue3Toastify with optional global configuration
+// Użyj Vue3Toastify z opcjonalną globalną konfiguracją
 app.use(Vue3Toastify, {
-  autoClose: 5000, // Example global configuration: Auto-close notifications after 5000ms
+  autoClose: 5000, // Przykładowa globalna konfiguracja: Automatyczne zamykanie powiadomień po 5000ms
 });
 
-// Mount your Vue app
-app.mount('#app');
+// Inicjalizacja stanu store z localStorage
+store.dispatch('initializeStore').then(() => {
+  // Montuj aplikację Vue po zakończeniu inicjalizacji stanu
+  app.mount('#app');
+});

@@ -73,35 +73,40 @@ export default {
            toast.error('Szczegóły dokumentów zostały już zaimportowane!');
     return;
   }
-        const response = await axios.post('https://localhost:7107/Document/import-items');
-        console.log(response.data); 
+        await axios.post('https://localhost:7107/Document/import-items');
         this.$store.dispatch('fetchDocuments');
+        this.$store.commit('setIsDocumentItemsImported', true); // Ustawienie flagi na true
         toast.success('Szczegóły zostały załadowane!'); 
       } catch (error) {
         console.error('Error importing document items:', error);
       }
     },
     async deleteDocuments() {
-    try {
-      const response = await axios.delete('https://localhost:7107/Document/delete-all-documents');
-      console.log(response.data); 
-      this.$store.dispatch('fetchDocuments'); // Pobranie dokumentów ponownie
-      toast.success('Dokumenty zostały usunięte!'); 
+  try {
+    const response = await axios.delete('https://localhost:7107/Document/delete-all-documents');
+    console.log(response.data);
+    this.$store.dispatch('fetchDocuments');
+    this.$store.commit('resetImportFlags'); // Resetowanie flag w Vuex
+    localStorage.setItem('isDocumentsImported', 'false'); // Dodajemy resetowanie flagi w localStorage
+    toast.success('Dokumenty zostały usunięte!');
+  } catch (error) {
+    console.error('Error deleting documents:', error);
+  }
+},
 
-    } catch (error) {
-      console.error('Error deleting documents:', error);
-    }
-  },
-  async deleteDocumentItems() {
+async deleteDocumentItems() {
   try {
     const response = await axios.delete('https://localhost:7107/Document/delete-all-document-items');
-    console.log(response.data); 
-    this.$store.dispatch('fetchDocuments'); // Pobranie dokumentów ponownie
+    console.log(response.data);
+    this.$store.dispatch('fetchDocuments'); // Może być potrzebne do odświeżenia listy dokumentów
+    this.$store.commit('resetImportFlags'); // Resetowanie flag w Vuex
+    localStorage.setItem('isDocumentItemsImported', 'false'); // Dodajemy resetowanie flagi w localStorage
     toast.success('Szczegóły dokumentów zostały usunięte!');
   } catch (error) {
     console.error('Error deleting document items:', error);
   }
 },
+
   }
 };
 </script>

@@ -17,7 +17,7 @@
       </ul>
     </div>
     <div v-else class="loading">
-      <p>Loading...</p>
+      <p>Ładowanie</p>
     </div>
     <div class="buttons-container">
     <router-link :to="'/document/' + (parseInt($route.params.id) - 1)" v-if="document">
@@ -61,7 +61,6 @@ export default {
       }
     },
     formatPrice(price) {
-      // Przeliczenie ceny z groszy na złotówki
       return (price / 100).toFixed(2);
     }
   },
@@ -90,7 +89,7 @@ html{
 }
 
 .title {
-  margin-bottom: 20px; /* Dodanie marginesu na dole tytułu */
+  margin-bottom: 20px;
 }
 
 .document-info {

@@ -7,7 +7,6 @@
       <button type="button" class="btn btn-secondary" :class="{ 'active': sortBy === 'date' && sortDirection === 'desc' }" @click="sortByDate('desc')">Od najnowszych</button>
     </div>
 
-    <!-- Displaying documents based on pagination -->
     <div v-for="(document, index) in paginatedDocuments" :key="index">
       <div class="document">       
         <p><b>Typ: </b>{{ document.type }}</p>
@@ -20,14 +19,12 @@
       </div>
     </div>
 
-    <!-- Pagination controls -->
     <div class="pagination">
       <MDBBtn color="info" @click="prevPage" :disabled="currentPage === 1">Poprzednia strona</MDBBtn>
       <span>Strona {{ currentPage }} z {{ totalPages }}</span>
       <MDBBtn color="info" @click="nextPage" :disabled="currentPage === totalPages">Następna strona</MDBBtn>
     </div>
 
-    <!-- Dropdown for selecting number of documents per page -->
     <div class="documents-per-page">
       <label for="perPage">Liczba dokumentów na stronę: </label>
       <select v-model="perPage" @change="updatePagination">
@@ -41,6 +38,7 @@
 import axios from 'axios';
 import { MDBBtn } from 'mdb-vue-ui-kit';
 import { mapState } from 'vuex';
+import { toast } from 'vue3-toastify';
 
 export default {
   components: {
@@ -57,7 +55,7 @@ export default {
           return this.documents.slice().sort((a, b) => new Date(b.date) - new Date(a.date));
         }
       } else {
-        return this.documents.slice(); // Return default order by ID
+        return this.documents.slice(); 
       }
     },
     totalPages() {
@@ -72,11 +70,11 @@ export default {
 
   data() {
     return {
-      sortBy: 'default', // Default sort order
-      sortDirection: 'asc', // Default sort direction
+      sortBy: 'default', 
+      sortDirection: 'asc', 
       currentPage: 1,
-      perPage: 3, // Default number of documents per page
-      perPageOptions: [3, 5, 10, 20, 50, 100], // Options for number of documents per page
+      perPage: 3, 
+      perPageOptions: [3, 5, 10, 20, 50, 100], 
     };
   },
 
@@ -95,64 +93,53 @@ export default {
     },
 
     async viewDocumentDetails(id) {
-      try {
-        // Pobierz szczegóły dokumentu z odpowiedzi serwera
-        const response = await axios.get(`https://localhost:7107/Document/documents/${id}/items`);
-        // Przekieruj do komponentu DocumentDetails i przekaż szczegóły dokumentu
-        this.$router.push({ name: 'DocumentDetails', params: { id: id, details: response.data } });
-      } catch (error) {
-        console.error('Error fetching document items:', error);
-      }
-    },
+  try {
+    const response = await axios.get(`https://localhost:7107/Document/documents/${id}/items`);
+    this.$router.push({ name: 'DocumentDetails', params: { id: id, details: response.data } });
+  } catch (error) {
+    toast.error('Szczegóły dokumentów nie zostały jeszcze zaimportowane.');
+  }
+},
 
     formatDate(date) {
       return new Date(date).toISOString().split('T')[0];
     },
-
     sortByDate(direction) {
       this.sortBy = 'date';
       this.sortDirection = direction;
     },
-
     sortByDefault() {
       this.sortBy = 'default';
     },
-
     nextPage() {
-  if (this.currentPage < this.totalPages) {
-    this.currentPage++;
-    sessionStorage.setItem('currentPage', this.currentPage);
-  }
-},
-prevPage() {
-  if (this.currentPage > 1) {
-    this.currentPage--;
-    sessionStorage.setItem('currentPage', this.currentPage);
-  }
-},
-updatePagination() {
-  this.currentPage = 1;
-  sessionStorage.setItem('currentPage', this.currentPage);
-  sessionStorage.setItem('perPage', this.perPage);
-},
-
-
+      if (this.currentPage < this.totalPages) {
+        this.currentPage++;
+        sessionStorage.setItem('currentPage', this.currentPage);
+      }
+    },
+    prevPage() {
+      if (this.currentPage > 1) {
+        this.currentPage--;
+        sessionStorage.setItem('currentPage', this.currentPage);
+      }
+    },
+    updatePagination() {
+      this.currentPage = 1;
+      sessionStorage.setItem('currentPage', this.currentPage);
+      sessionStorage.setItem('perPage', this.perPage);
+    },
   },
   mounted() {
-  const savedPage = sessionStorage.getItem('currentPage');
-  const savedPerPage = sessionStorage.getItem('perPage');
-
-  if (savedPage) {
-    this.currentPage = parseInt(savedPage, 10);
-  }
-  
-  if (savedPerPage) {
-    this.perPage = parseInt(savedPerPage, 10);
-  }
-
-  this.$store.dispatch('fetchDocuments'); 
-},
-
+    const savedPage = sessionStorage.getItem('currentPage');
+    const savedPerPage = sessionStorage.getItem('perPage');
+    if (savedPage) {
+      this.currentPage = parseInt(savedPage, 10);
+    }
+    if (savedPerPage) {
+      this.perPage = parseInt(savedPerPage, 10);
+    }
+    this.$store.dispatch('fetchDocuments'); 
+  },
 };
 </script>
 
