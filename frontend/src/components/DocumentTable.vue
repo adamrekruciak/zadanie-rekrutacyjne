@@ -1,20 +1,22 @@
 <template>
     <div>
-      <h2>List of Documents</h2>
+      <h2>Lista dokumentów (widok w formie tabelarycznej)</h2>
       
       <table>
         <thead>
           <tr>
-            <th>Type</th>
-            <th>Date</th>
-            <th>Name</th>
-            <th>City</th>
+            <th>ID</th>
+            <th>Typ</th>
+            <th>Data</th>
+            <th>Imię i nazwisko</th>
+            <th>Miasto</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="document in documents" :key="document.id">
+            <td>{{ document.id }}</td>
             <td>{{ document.type }}</td>
-            <td>{{ document.date }}</td>
+            <td>{{ formatDate(document.date) }}</td>
             <td>{{ document.firstName }} {{ document.lastName }}</td>
             <td>{{ document.city }}</td>
           </tr>
@@ -43,7 +45,10 @@
         } catch (error) {
           console.error('Error fetching documents:', error);
         }
-      }
+      },
+      formatDate(date) {
+      return new Date(date).toISOString().split('T')[0];
+    },
     }
   };
   </script>
