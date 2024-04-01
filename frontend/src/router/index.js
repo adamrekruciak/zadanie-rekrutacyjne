@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
-import DocumentDetails from '../components/DocumentDetails.vue' // Import komponentu DocumentDetails
+import DocumentDetails from '../components/DocumentDetails.vue'
 
 const routes = [
   {
@@ -9,9 +9,9 @@ const routes = [
     component: HomeView
   },
   {
-    path: '/document/:id', // Ścieżka z parametrem :id
-    name: 'DocumentDetails', // Nazwa trasy
-    component: DocumentDetails, // Komponent DocumentDetails
+    path: '/document/:id',
+    name: 'DocumentDetails', 
+    component: DocumentDetails,
     props: true
   }
 ]

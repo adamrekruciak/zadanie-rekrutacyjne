@@ -13,16 +13,16 @@
         <li v-for="item in documentItems" :key="item.id">
           <span><b>{{ item.product }}</b></span> 
           <p> Ilość: {{ item.quantity }}, Cena: {{ formatPrice(item.price) }}</p> 
-          </li>
+        </li>
       </ul>
     </div>
     <div v-else class="loading">
       <p>Ładowanie</p>
     </div>
     <div class="buttons-container">
-    <router-link :to="'/document/' + (parseInt($route.params.id) - 1)" v-if="document">
+    <router-link v-if="document && parseInt($route.params.id) > 1" :to="'/document/' + (parseInt($route.params.id) - 1)">
       <MDBBtn color="info" class="inner-button">Poprzedni dokument</MDBBtn>
-    </router-link> 
+    </router-link>
     <router-link to="/">
       <MDBBtn color="danger" class="inner-button">Powrót do listy dokumentów</MDBBtn>
     </router-link>
@@ -31,7 +31,6 @@
     </router-link>
     </div>
   </div>
-  
 </template>
 
 <script>
@@ -53,13 +52,13 @@ export default {
       try {
         const response = await axios.get(`https://localhost:7107/Document/documents/${id}`);
         this.document = response.data;
-
         const itemsResponse = await axios.get(`https://localhost:7107/Document/documents/${id}/items`);
         this.documentItems = itemsResponse.data;
       } catch (error) {
         console.error('Error fetching document details:', error);
       }
     },
+
     formatPrice(price) {
       return (price / 100).toFixed(2);
     }
@@ -80,6 +79,7 @@ export default {
 html{
   background: #f2f2f2
 }
+
 .document-details {
   display: flex;
   flex-direction: column;
@@ -127,6 +127,7 @@ html{
   width: 40%;
   margin-top: 20px;
 }
+
 .inner-button {
   flex: 1; 
   height: 60px;

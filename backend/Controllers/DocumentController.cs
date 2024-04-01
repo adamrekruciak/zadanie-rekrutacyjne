@@ -27,14 +27,13 @@ namespace zadanie_rekrutacyjne.Controllers
             var config = new CsvConfiguration(CultureInfo.InvariantCulture)
             {
                 HasHeaderRecord = true,
-                Delimiter = ";", // Make sure this is the delimiter used in your CSV file
-                BadDataFound = null // Optionally ignore bad data
+                Delimiter = ";", 
+                BadDataFound = null 
             };
 
             using (var reader = new StreamReader(filePath))
             using (var csv = new CsvReader(reader, config))
             {
-                // Adjust the date format according to your CSV file
                 csv.Context.TypeConverterOptionsCache.GetOptions<DateTime>().Formats = new[] { "yyyy-MM-dd" };
 
                 var records = csv.GetRecords<Document>().Select(doc => new Document
@@ -44,7 +43,6 @@ namespace zadanie_rekrutacyjne.Controllers
                     FirstName = doc.FirstName,
                     LastName = doc.LastName,
                     City = doc.City
-                    // Do not set the Id property here
                 }).ToList();
                 _context.Documents.AddRange(records);
                 _context.SaveChanges();
@@ -60,8 +58,8 @@ namespace zadanie_rekrutacyjne.Controllers
             var config = new CsvConfiguration(CultureInfo.InvariantCulture)
             {
                 HasHeaderRecord = true,
-                Delimiter = ";", // Upewnij się, że to jest poprawny delimiter
-                BadDataFound = null // Opcjonalnie ignoruj złe dane
+                Delimiter = ";", 
+                BadDataFound = null 
             };
 
             using (var reader = new StreamReader(filePath))
@@ -72,8 +70,6 @@ namespace zadanie_rekrutacyjne.Controllers
                 _context.DocumentItems.AddRange(records);
                 _context.SaveChanges();
             }
-
-
             return Ok();
         }
 
@@ -82,12 +78,12 @@ namespace zadanie_rekrutacyjne.Controllers
         {
             try
             {
-                var documents = _context.Documents.ToList(); // Pobierz wszystkie dokumenty z bazy danych
-                return Ok(documents); // Zwróć dokumenty w formacie JSON
+                var documents = _context.Documents.ToList();
+                return Ok(documents); 
             }
             catch (Exception ex)
             {
-                return StatusCode(500, "Internal server error"); // Obsłuż błąd w przypadku niepowodzenia pobrania danych
+                return StatusCode(500, "Internal server error"); 
             }
         }
 
@@ -96,12 +92,12 @@ namespace zadanie_rekrutacyjne.Controllers
         {
             try
             {
-                var documentItems = _context.DocumentItems.ToList(); // Pobierz wszystkie pozycje dokumentów z bazy danych
-                return Ok(documentItems); // Zwróć pozycje dokumentów w formacie JSON
+                var documentItems = _context.DocumentItems.ToList();
+                return Ok(documentItems);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, "Internal server error"); // Obsłuż błąd w przypadku niepowodzenia pobrania danych
+                return StatusCode(500, "Internal server error");
             }
         }
 
@@ -110,16 +106,16 @@ namespace zadanie_rekrutacyjne.Controllers
         {
             try
             {
-                var document = _context.Documents.FirstOrDefault(d => d.Id == id); // Pobierz dokument na podstawie jego identyfikatora
+                var document = _context.Documents.FirstOrDefault(d => d.Id == id); 
                 if (document == null)
                 {
-                    return NotFound(); // Jeśli dokument nie został znaleziony, zwróć kod 404
+                    return NotFound();
                 }
-                return Ok(document); // Zwróć dokument w formacie JSON
+                return Ok(document); 
             }
             catch (Exception ex)
             {
-                return StatusCode(500, "Internal server error"); // Obsłuż błąd w przypadku niepowodzenia pobrania danych
+                return StatusCode(500, "Internal server error");
             }
         }
         [HttpGet("documents/{id}/items")]
@@ -130,13 +126,13 @@ namespace zadanie_rekrutacyjne.Controllers
                 var documentItems = _context.DocumentItems.Where(item => item.DocumentId == id).ToList();
                 if (documentItems.Count == 0)
                 {
-                    return NotFound(); // Jeśli nie znaleziono pozycji dokumentów dla danego ID, zwróć kod 404
+                    return NotFound();
                 }
-                return Ok(documentItems); // Zwróć pozycje dokumentów w formacie JSON
+                return Ok(documentItems); 
             }
             catch (Exception ex)
             {
-                return StatusCode(500, "Internal server error"); // Obsłuż błąd w przypadku niepowodzenia pobrania danych
+                return StatusCode(500, "Internal server error");
             }
         }
         [HttpDelete("delete-all-documents")]
@@ -166,15 +162,13 @@ namespace zadanie_rekrutacyjne.Controllers
                 return StatusCode(500, "Internal server error");
             }
         }
-
-
     }
 
     public sealed class DocumentItemMap : ClassMap<DocumentItem>
     {
         public DocumentItemMap()
         {
-            Map(m => m.DocumentId).Name("DocumentId"); // Mapowanie kolumny DocumentId z pliku CSV na właściwość DocumentId
+            Map(m => m.DocumentId).Name("DocumentId"); // Mapowanie
             Map(m => m.Ordinal);
             Map(m => m.Product);
             Map(m => m.Quantity);
@@ -182,7 +176,4 @@ namespace zadanie_rekrutacyjne.Controllers
             Map(m => m.TaxRate);
         }
     }
-
-
-
 }

@@ -1,38 +1,46 @@
 <template>
   <div>
     <h2>Lista dokumentów</h2>
-    <div class="sorting-buttons">
-      <button type="button" class="btn btn-secondary" :class="{ 'active': sortBy === 'default' }" @click="sortByDefault">Sortuj po ID</button>
-      <button type="button" class="btn btn-secondary" :class="{ 'active': sortBy === 'date' && sortDirection === 'asc' }" @click="sortByDate('asc')">Od najstarszych</button>
-      <button type="button" class="btn btn-secondary" :class="{ 'active': sortBy === 'date' && sortDirection === 'desc' }" @click="sortByDate('desc')">Od najnowszych</button>
-    </div>
 
-    <div v-for="(document, index) in paginatedDocuments" :key="index">
-      <div class="document">       
-        <p><b>Typ: </b>{{ document.type }}</p>
-        <p><b>Data: </b>{{ formatDate(document.date) }}</p>
-        <p><b>Imię i nazwisko: </b>{{ document.firstName }} {{ document.lastName }}</p>
-        <p><b>Miasto: </b>{{ document.city }}</p> 
-        <div class="buttonInside"> 
-          <MDBBtn color="warning" @click="viewDocumentDetails(document.id)">Szczegóły</MDBBtn>
+    <div v-if="documents.length > 0">
+      <div class="sorting-buttons">
+        <button type="button" class="btn btn-secondary" :class="{ 'active': sortBy === 'default' }" @click="sortByDefault">Sortuj po ID</button>
+        <button type="button" class="btn btn-secondary" :class="{ 'active': sortBy === 'date' && sortDirection === 'asc' }" @click="sortByDate('asc')">Od najstarszych</button>
+        <button type="button" class="btn btn-secondary" :class="{ 'active': sortBy === 'date' && sortDirection === 'desc' }" @click="sortByDate('desc')">Od najnowszych</button>
+      </div>
+
+      <div v-for="(document, index) in paginatedDocuments" :key="index">
+        <div class="document">       
+          <p><b>Typ: </b>{{ document.type }}</p>
+          <p><b>Data: </b>{{ formatDate(document.date) }}</p>
+          <p><b>Imię i nazwisko: </b>{{ document.firstName }} {{ document.lastName }}</p>
+          <p><b>Miasto: </b>{{ document.city }}</p> 
+          <div class="buttonInside"> 
+            <MDBBtn color="warning" @click="viewDocumentDetails(document.id)">Szczegóły</MDBBtn>
+          </div>
         </div>
+      </div>
+
+      <div class="pagination">
+        <MDBBtn color="info" @click="prevPage" :disabled="currentPage === 1">Poprzednia strona</MDBBtn>
+        <span>Strona {{ currentPage }} z {{ totalPages }}</span>
+        <MDBBtn color="info" @click="nextPage" :disabled="currentPage === totalPages">Następna strona</MDBBtn>
+      </div>
+
+      <div class="documents-per-page">
+        <label for="perPage">Liczba dokumentów na stronę: </label>
+        <select v-model="perPage" @change="updatePagination">
+          <option v-for="option in perPageOptions" :key="option" :value="option">{{ option }}</option>
+        </select>
       </div>
     </div>
 
-    <div class="pagination">
-      <MDBBtn color="info" @click="prevPage" :disabled="currentPage === 1">Poprzednia strona</MDBBtn>
-      <span>Strona {{ currentPage }} z {{ totalPages }}</span>
-      <MDBBtn color="info" @click="nextPage" :disabled="currentPage === totalPages">Następna strona</MDBBtn>
-    </div>
-
-    <div class="documents-per-page">
-      <label for="perPage">Liczba dokumentów na stronę: </label>
-      <select v-model="perPage" @change="updatePagination">
-        <option v-for="option in perPageOptions" :key="option" :value="option">{{ option }}</option>
-      </select>
+    <div v-else>
+      <p style="margin-top:50px;">Brak dostępnych dokumentów do wyświetlenia. Zaimportuj dane.</p>
     </div>
   </div>
 </template>
+
 
 <script>
 import axios from 'axios';
@@ -93,36 +101,41 @@ export default {
     },
 
     async viewDocumentDetails(id) {
-  try {
-    const response = await axios.get(`https://localhost:7107/Document/documents/${id}/items`);
-    this.$router.push({ name: 'DocumentDetails', params: { id: id, details: response.data } });
-  } catch (error) {
-    toast.error('Szczegóły dokumentów nie zostały jeszcze zaimportowane.');
-  }
-},
+      try {
+        const response = await axios.get(`https://localhost:7107/Document/documents/${id}/items`);
+        this.$router.push({ name: 'DocumentDetails', params: { id: id, details: response.data } });
+      } catch (error) {
+        toast.error('Szczegóły dokumentów nie zostały jeszcze zaimportowane.');
+      }
+    },
 
     formatDate(date) {
       return new Date(date).toISOString().split('T')[0];
     },
+
     sortByDate(direction) {
       this.sortBy = 'date';
       this.sortDirection = direction;
     },
+
     sortByDefault() {
       this.sortBy = 'default';
     },
+
     nextPage() {
       if (this.currentPage < this.totalPages) {
         this.currentPage++;
         sessionStorage.setItem('currentPage', this.currentPage);
       }
     },
+
     prevPage() {
       if (this.currentPage > 1) {
         this.currentPage--;
         sessionStorage.setItem('currentPage', this.currentPage);
       }
     },
+    
     updatePagination() {
       this.currentPage = 1;
       sessionStorage.setItem('currentPage', this.currentPage);

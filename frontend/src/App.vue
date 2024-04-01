@@ -1,5 +1,4 @@
 <template>  
-
   <router-view/>
 </template>
 
@@ -14,6 +13,7 @@
   color: #2c3e50;
   background: #f2f2f2;
 }
+
 nav {
   padding: 30px;
 }
@@ -26,6 +26,7 @@ nav a {
 nav a.router-link-exact-active {
   color: #42b983;
 }
+
 .buttons {
   margin-bottom: 20px;
   text-align: right;
