@@ -4,7 +4,7 @@
     <div v-if="document" class="document-info">
       <p>
         <span><b>Typ: </b>{{ document.type }}</span>
-        <span><b>Data: </b>{{ document.date }}</span>
+        <span><b>Data: </b>{{ formatDate(document.date) }}</span>
         <span><b>Imię i nazwisko: </b>{{ document.firstName }} {{ document.lastName }}</span>
         <span><b>Miasto: </b>{{ document.city }}</span>
       </p>
@@ -12,7 +12,7 @@
       <ul>
         <li v-for="item in documentItems" :key="item.id">
           <span><b>{{ item.product }}</b></span> 
-          <p> Ilość: {{ item.quantity }}, Cena: {{ formatPrice(item.price) }}</p> 
+          <p> Ilość: {{ item.quantity }}, Cena: {{ formatPrice(item.price) }}, Wysokość podatku: {{ item.taxRate }}%</p> 
         </li>
       </ul>
     </div>
@@ -57,6 +57,9 @@ export default {
       } catch (error) {
         console.error('Error fetching document details:', error);
       }
+    },
+    formatDate(date) {
+      return new Date(date).toISOString().split('T')[0];
     },
 
     formatPrice(price) {

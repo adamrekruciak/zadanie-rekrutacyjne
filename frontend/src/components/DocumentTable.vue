@@ -1,8 +1,10 @@
 <template>
   <div>
     <h2>Lista dokumentów (widok w formie tabelarycznej)</h2>
-    <div v-if="filteredDocuments.length > 0">
+    <div>
       <input v-model="searchQuery" type="text" placeholder="Wyszukaj w dokumentach" class="search-input"/>
+    </div>
+    <div v-if="filteredDocuments.length > 0">
       <table>
         <thead>
           <tr>
@@ -28,7 +30,8 @@
                   <div class="documentDetails" v-for="item in documentItems[document.id]" :key="item.id">
                     <p><b>Produkt:</b> {{ item.product }}
                       <b>Ilość:</b> {{ item.quantity }}
-                      <b> Cena:</b> {{ formatPrice(item.price) }}</p>
+                      <b> Cena:</b> {{ formatPrice(item.price) }}
+                      <b> Wysokość podatku:</b> {{ item.taxRate }}</p>
                   </div>
                 </div>
                 <div v-else>
@@ -50,11 +53,11 @@
           <option v-for="option in perPageOptions" :key="option" :value="option">{{ option }}</option>
         </select>
       </div>
-    </div>
-    <div v-else>
-      <p style="margin-top:50px;">Brak dostępnych dokumentów do wyświetlenia. Zaimportuj dane.</p>
+    <div v-if="filteredDocuments.length === 0">
+      <p style="margin-top:50px;">Brak dostępnych dokumentów do wyświetlenia.</p>
     </div>
   </div>
+</div>
 </template>
 
 <script>
